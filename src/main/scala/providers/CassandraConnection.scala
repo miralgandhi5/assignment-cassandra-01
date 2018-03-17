@@ -20,7 +20,6 @@ object CassandraConnection {
     //database modelling
     session.execute(s"CREATE TABLE IF NOT EXISTS Employees (emp_id int, emp_name text,emp_city text,emp_salary varint, emp_phone varint ,PRIMARY KEY(emp_id,emp_salary) )")
     session.execute(s"CREATE TABLE IF NOT EXISTS CityEmployees (emp_id int, emp_name text,emp_city text,emp_salary varint, emp_phone varint ,PRIMARY KEY(emp_city) )")
-    session.execute(s"CREATE INDEX ON Employees(emp_city)")
     session
   }
 
