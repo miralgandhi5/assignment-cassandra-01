@@ -38,7 +38,7 @@ object Operations {
     */
 
   def getEmployeeWithId(id: Int): List[Row] = {
-    val selectCql = s"SELECT * FROM EMPLOYEES WHERE emp_id = $id"
+    val selectCql = s"SELECT * FROM Employees WHERE emp_id = $id"
     session.execute(selectCql).asScala.toList
   }
 
@@ -52,8 +52,19 @@ object Operations {
     */
 
   def updateEmployeeCity(id: Int, salary: Int, city: String): List[Row] = {
-    val updateCqlForEmployees = s"UPDATE Employees SET emp_city = $city WHERE emp_id = $id and emp_salary = $salary"
-    session.execute(updateCqlForEmployees).asScala.toList
+    val updateCqlForEmployees = s"UPDATE Employees SET emp_city = '$city' WHERE emp_id = $id and emp_salary = $salary"
+    session.execute(updateCqlForEmployees)
+    getAllEmployee
+  }
+
+  /**
+    * gives list of all employees.
+    *
+    * @return employess.
+    */
+  def getAllEmployee: List[Row] = {
+    val selectCql = s"SELECT * from Employees"
+    session.execute(selectCql).asScala.toList
   }
 
   /**
@@ -77,7 +88,8 @@ object Operations {
     */
 
   def getEmployeesWithCity(city: String): List[Row] = {
-    val selectCql = s"SELECT * FROM EMPLOYEES WHERE emp_city = $city"
+    session.execute(s"CREATE INDEX IF NOT EXISTS EmployeeCity ON Employees(emp_city)")
+    val selectCql = s"SELECT * FROM EMPLOYEES WHERE emp_city = '$city'"
     session.execute(selectCql).asScala.toList
   }
 
@@ -88,8 +100,19 @@ object Operations {
     * @return employees
     */
   def deleteFromCityEmployees(city: String): List[Row] = {
-    val deleteCql = s"DELETE FROM CityEmployees WHERE emp_city = $city"
-    session.execute(deleteCql).asScala.toList
+    val deleteCql = s"DELETE FROM CityEmployees WHERE emp_city = '$city'"
+    session.execute(deleteCql)
+    getAllCityEmployee
+  }
+
+  /**
+    * gives list of all city employees.
+    *
+    * @return city employees.
+    */
+  def getAllCityEmployee: List[Row] = {
+    val selectCql = s"SELECT * from CityEmployees"
+    session.execute(selectCql).asScala.toList
   }
 
 
